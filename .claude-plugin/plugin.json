@@ -1,6 +1,6 @@
 {
   "name": "evals",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Skills for building LLM evals. Starts with interactive error discovery: build a review app, sample diverse traces, and organize human annotations into failure modes.",
   "author": {
     "name": "Shreya Shankar and Hamel Husain"
