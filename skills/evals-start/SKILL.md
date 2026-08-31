@@ -1,5 +1,5 @@
 ---
-name: start
+name: evals-start
 description: >
   Entry point for evals. Use when the user asks for help with evals,
   does not know where to begin, or asks for something no other skill
@@ -7,7 +7,7 @@ description: >
   this plugin already matches; load that skill directly.
 ---
 
-# Start
+# Evals Start
 
 This plugin splits eval work into targeted skills. Your job here is small: find the row below that matches the user's situation, tell the user which skill you are loading and why, then load that skill and follow its workflow from start to finish instead of improvising your own version of it.
 
