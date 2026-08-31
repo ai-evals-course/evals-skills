@@ -1,0 +1,7 @@
+interface:
+  display_name: "Build Review Interface"
+  short_description: "Build browser-based annotation interfaces."
+  default_prompt: "Use $build-review-interface to build an annotation interface for my data."
+
+policy:
+  allow_implicit_invocation: true

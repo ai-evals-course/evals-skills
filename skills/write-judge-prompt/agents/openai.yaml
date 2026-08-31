@@ -1,0 +1,7 @@
+interface:
+  display_name: "Write Judge Prompt"
+  short_description: "Design reliable prompts for LLM judges."
+  default_prompt: "Use $write-judge-prompt to design an LLM judge for this failure mode."
+
+policy:
+  allow_implicit_invocation: true

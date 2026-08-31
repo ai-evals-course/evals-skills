@@ -1,0 +1,7 @@
+interface:
+  display_name: "Evaluate RAG"
+  short_description: "Evaluate RAG retrieval and generation quality."
+  default_prompt: "Use $evaluate-rag to evaluate my RAG pipeline."
+
+policy:
+  allow_implicit_invocation: true

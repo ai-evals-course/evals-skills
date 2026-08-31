@@ -15,7 +15,16 @@ There are many [easily avoidable footguns](https://hamel.dev/blog/posts/revenge/
 
 ## Installation
 
-Install with [npx skills](https://github.com/vercel-labs/skills):
+Install the plugin in Codex:
+
+```bash
+codex plugin marketplace add ai-evals-course/evals-skills
+codex plugin add evals@ai-evals-course
+```
+
+Or install the standalone skills with the Agent Skills CLI:
+
+[npx skills](https://github.com/vercel-labs/skills) works with several coding agents:
 
 ```bash
 npx skills add https://github.com/ai-evals-course/evals-skills

@@ -1,0 +1,31 @@
+{
+  "name": "evals",
+  "version": "0.3.0",
+  "description": "Skills for building LLM evals. Starts with interactive error discovery: build a review app, sample diverse traces, and organize human annotations into failure modes.",
+  "author": {
+    "name": "Shreya Shankar and Hamel Husain"
+  },
+  "homepage": "https://maven.com/parlance-labs/evals?promoCode=evals-info-url",
+  "repository": "https://github.com/ai-evals-course/evals-skills",
+  "keywords": [
+    "evals",
+    "llm",
+    "evaluation",
+    "error-analysis",
+    "annotation"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Evals Skills",
+    "shortDescription": "Build trustworthy product evals with coding agents.",
+    "longDescription": "Tools for product-specific LLM evaluation, from trace review through evaluator validation.",
+    "developerName": "Shreya Shankar and Hamel Husain",
+    "category": "Productivity",
+    "capabilities": [],
+    "defaultPrompt": [
+      "Audit my existing LLM eval pipeline.",
+      "Help me find failure modes in these traces.",
+      "Help me design and validate an LLM judge."
+    ]
+  }
+}

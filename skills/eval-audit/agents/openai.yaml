@@ -1,0 +1,7 @@
+interface:
+  display_name: "Eval Audit"
+  short_description: "Audit whether an LLM eval pipeline is trustworthy."
+  default_prompt: "Use $eval-audit to audit my existing LLM eval pipeline."
+
+policy:
+  allow_implicit_invocation: true

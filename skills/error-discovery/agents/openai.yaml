@@ -1,0 +1,7 @@
+interface:
+  display_name: "Error Discovery"
+  short_description: "Find and organize failure modes in traces."
+  default_prompt: "Use $error-discovery to find failure modes in my traces."
+
+policy:
+  allow_implicit_invocation: true

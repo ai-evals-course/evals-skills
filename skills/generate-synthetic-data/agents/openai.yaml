@@ -1,0 +1,7 @@
+interface:
+  display_name: "Generate Synthetic Data"
+  short_description: "Create diverse synthetic inputs for evals."
+  default_prompt: "Use $generate-synthetic-data to create diverse test inputs for my pipeline."
+
+policy:
+  allow_implicit_invocation: true
