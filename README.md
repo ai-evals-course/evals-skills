@@ -15,23 +15,7 @@ There are many [easily avoidable footguns](https://hamel.dev/blog/posts/revenge/
 
 ## Installation
 
-Install the plugin in Claude Code:
-
-```bash
-claude plugin marketplace add ai-evals-course/evals-skills
-claude plugin install evals@ai-evals-course
-```
-
-Install the plugin in Codex:
-
-```bash
-codex plugin marketplace add ai-evals-course/evals-skills
-codex plugin add evals@ai-evals-course
-```
-
-For other coding agents, install the standalone skills with the Agent Skills CLI:
-
-[npx skills](https://github.com/vercel-labs/skills) works with several coding agents:
+Install with [npx skills](https://github.com/vercel-labs/skills):
 
 ```bash
 npx skills add https://github.com/ai-evals-course/evals-skills
