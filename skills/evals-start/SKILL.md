@@ -15,6 +15,7 @@ This plugin splits eval work into targeted skills. Your job here is small: find 
 |---|---|
 | Has traces, wants to find failure modes, no established taxonomy yet | `error-discovery` |
 | Has an existing eval pipeline and wants to know if it can be trusted | `eval-audit` |
+| Has a known failure mode that code can check (e.g., format, schema, regex, execution) | `write-code-eval` |
 | Has a known failure mode and wants an LLM judge for it | `write-judge-prompt` |
 | Has an LLM judge or evaluator and wants to check its quality | `validate-evaluator` |
 | Has no traces to review yet | `generate-synthetic-data`, then `error-discovery` |
