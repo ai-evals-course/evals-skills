@@ -3,12 +3,12 @@ name: write-code-eval
 description: >
   Write code evaluators for known failure modes with objective rules. Use when
   code can check the rule from a trace, with or without a reference answer.
-  Use write-judge-prompt when the rule requires interpretation.
+  Use `write-judge-prompt` when the rule requires interpretation.
 ---
 
 # Write a code evaluator
 
-Start with a failure mode found through error analysis. Write one check for that failure mode.
+Start with a failure mode found through error analysis. Write one check for that failure mode, much like a unit test that asserts what should hold for each trace.
 
 1. State the rule and identify the trace fields or reference data the check needs. If the rule requires interpretation, use `write-judge-prompt`.
 2. Implement the check in the project's language and eval framework. Return a result and a reason in the format that framework expects.

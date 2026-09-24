@@ -5,7 +5,7 @@ description: >
   cannot handle. Use when a failure mode requires interpretation (tone,
   faithfulness, relevance, completeness). Do NOT use when the failure mode can be
   checked with code (regex, schema validation, execution tests); use
-  write-code-eval. To validate an existing judge, use validate-evaluator.
+  `write-code-eval`. To validate an existing judge, use `validate-evaluator`.
 ---
 
 # Write LLM-as-Judge Prompt
