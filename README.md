@@ -10,8 +10,8 @@ There are many [easily avoidable footguns](https://hamel.dev/blog/posts/revenge/
 
 **evals-start** is the entry point. It looks at your situation and routes you to the right skill. Most of the time it will send you to one of these two:
 
-- **[eval-audit](skills/eval-audit/SKILL.md)**, if you already have an eval pipeline. It inspects your setup and recommends next steps. The audit isn't a complete solution, but it will catch common problems we've seen in evals.
-- **[error-discovery](skills/error-discovery/SKILL.md)**, if you have traces but haven't analyzed them yet. It builds a customized annotation interface and helps you sample traces intelligently. Shreya does a live walkthrough of using this skill [here](https://youtu.be/tqUDjc1HzO4). (This skill is discussed in more detail below.)
+- **[eval-audit](skills/eval-audit/SKILL.md)**, if you already have an eval pipeline. It inspects your setup and recommends next steps.
+- **[error-discovery](skills/error-discovery/SKILL.md)**, if you have traces but haven't analyzed them yet. It builds an annotation interface and helps you sample traces. Watch [Shreya's walkthrough](https://youtu.be/tqUDjc1HzO4).
 
 ## Installation
 
@@ -42,7 +42,7 @@ npx skills update
 | [eval-audit](skills/eval-audit/SKILL.md) | Audit an eval pipeline and surface problems with prioritized severity |
 | [error-discovery](skills/error-discovery/SKILL.md) | Build a review app, select diverse samples, and organize your notes into failure modes |
 | [generate-synthetic-data](skills/generate-synthetic-data/SKILL.md) | Create diverse synthetic test inputs using dimension-based tuple generation |
-| [write-code-eval](skills/write-code-eval/SKILL.md) | Write deterministic code checks for objective failure modes |
+| [write-code-eval](skills/write-code-eval/SKILL.md) | Write code checks for known failure modes |
 | [write-judge-prompt](skills/write-judge-prompt/SKILL.md) | Design LLM-as-Judge evaluators for subjective quality criteria |
 | [validate-evaluator](skills/validate-evaluator/SKILL.md) | Calibrate LLM judges against human labels using data splits, TPR/TNR, and bias correction |
 | [evaluate-rag](skills/evaluate-rag/SKILL.md) | Evaluate retrieval and generation quality in RAG pipelines |
@@ -80,8 +80,8 @@ Can you help me do error analysis on traces.jsonl?
 
 ## Write your own skills
 
-These skills encode common mistakes that generalize across projects. Skills grounded in your own data and domain will outperform them. Start here, then write your own. Matt Pocock's [writing-for-ai-agents](https://github.com/mattpocock/writing-for-ai-agents) is a good resource.
+These skills address common eval mistakes. Start here, then write skills for your own data and domain. Matt Pocock's [writing-for-agents skill](https://github.com/mattpocock/skills/tree/main/skills/productivity/writing-for-agents) explains how to write instructions for agents.
 
 ## Beyond these skills
 
-These skills cover the parts of eval work that generalize across projects. Much of the process doesn't, such as production monitoring, CI/CD regression suites, and cost optimization. The [AI Evals course](https://maven.com/parlance-labs/evals?promoCode=evals-info-url) covers those.
+These skills cover eval work that applies across projects. The [AI Evals course](https://maven.com/parlance-labs/evals?promoCode=evals-info-url) also covers production monitoring, regression suites, and cost.

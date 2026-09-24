@@ -5,8 +5,7 @@ description: >
   cannot handle. Use when a failure mode requires interpretation (tone,
   faithfulness, relevance, completeness). Do NOT use when the failure mode can be
   checked with code (regex, schema validation, execution tests); use
-  write-code-eval instead. Do NOT use when
-  you need to validate or calibrate the judge — use validate-evaluator instead.
+  write-code-eval. To validate an existing judge, use validate-evaluator.
 ---
 
 # Write LLM-as-Judge Prompt
@@ -17,7 +16,7 @@ Design a binary Pass/Fail LLM-as-Judge evaluator for one specific failure mode. 
 
 - Error analysis is complete. The failure mode is identified.
 - You have human-labeled traces for this failure mode (at least 20 Pass and 20 Fail examples).
-- A code-based evaluator cannot check this failure mode. Exhaust code-based options before reaching for a judge — many failure modes that seem subjective reduce to keyword checks, regex, or API calls when you understand the domain. Example: detecting whether an AI interviewing coach suggests "general" questions (asking about typical behavior instead of a specific past event) seems to require semantic understanding, but in practice a keyword check for words like "usually," "typical," and "normally" could work quite well. If code can check it, use `write-code-eval`.
+- Check whether code can detect the failure. For example, an interviewing coach that asks about typical behavior may use words like "usually" or "normally." Test a keyword check against the labeled traces. Use `write-code-eval` if it works.
 
 ## The Four Components
 
