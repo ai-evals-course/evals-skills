@@ -42,6 +42,7 @@ npx skills update
 | [eval-audit](skills/eval-audit/SKILL.md) | Audit an eval pipeline and surface problems with prioritized severity |
 | [error-discovery](skills/error-discovery/SKILL.md) | Build a review app, select diverse samples, and organize your notes into failure modes |
 | [generate-synthetic-data](skills/generate-synthetic-data/SKILL.md) | Create diverse synthetic test inputs using dimension-based tuple generation |
+| [write-code-eval](skills/write-code-eval/SKILL.md) | Write deterministic code checks for objective failure modes |
 | [write-judge-prompt](skills/write-judge-prompt/SKILL.md) | Design LLM-as-Judge evaluators for subjective quality criteria |
 | [validate-evaluator](skills/validate-evaluator/SKILL.md) | Calibrate LLM judges against human labels using data splits, TPR/TNR, and bias correction |
 | [evaluate-rag](skills/evaluate-rag/SKILL.md) | Evaluate retrieval and generation quality in RAG pipelines |

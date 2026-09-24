@@ -1,0 +1,7 @@
+interface:
+  display_name: "Write Code Eval"
+  short_description: "Write deterministic code checks for objective failure modes."
+  default_prompt: "Use $write-code-eval to write a code-based check for this failure mode."
+
+policy:
+  allow_implicit_invocation: true

@@ -71,7 +71,7 @@ Flag any that evaluate holistically ("Is this response helpful?", "Rate the qual
 
 Flag LLM judges used for objectively checkable criteria: format validation, constraint satisfaction, keyword presence, schema conformance.
 
-**Finding if over-relying on judges:** Replace objective checks with code (regex, parsing, schema validation, execution tests). Reserve LLM judges for criteria requiring interpretation.
+**Finding if over-relying on judges:** Replace objective checks with code (regex, parsing, schema validation, execution tests). Reserve LLM judges for criteria requiring interpretation. Use `write-code-eval`.
 
 **Check:** Are similarity metrics used as primary evaluation?
 
