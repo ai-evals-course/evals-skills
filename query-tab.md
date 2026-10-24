@@ -48,6 +48,79 @@ Add an Ask view to the app:
 - `AI.EXTRACT(text, {'field': 'question?'})` copies a span from the text. Use it to get the quote for a suggestion.
 - Use plain `LIKE` and `=` predicates for exclusions that keywords can catch, e.g., `text NOT LIKE '%delay%'`.
 
+## Example queries
+
+Each query below ran on Qwen3 4B over a `messages` table built from 660 τ-bench conversations (14,274 rows). Rows have `message_id`, `record_id`, `turn`, `role` (`user`, `assistant`, `tool_call`), `text`, `prev_user_id` (the latest customer message before this row), and `next_action` (on customer rows: the first write tool the agent called right after). The timings are with a warm container.
+
+**Score with a cutoff, favoring precision.** Did the agent act without an explicit yes? Precision 0.92 and recall 0.33 against 184 hand labels, in 29 seconds. The same question as a two-label `AI.CLASSIFY` got precision 0.38, so the positive wording and the list of what does not count are what make it work.
+
+```sql
+SELECT u.message_id, u.next_action,
+       AI.SCORE(PROMPT('Customer message to an airline agent:\n{0}\n\nDoes this message give the agent a go-ahead, such as yes, confirm, proceed, go ahead, or please do it? Picking an option, naming a payment method, asking a question, or describing a request is not a go-ahead.', u.text)) AS goahead_score
+FROM messages u
+WHERE u.role = 'user'
+  AND u.next_action IS NOT NULL
+  AND AI.SCORE(PROMPT('Customer message to an airline agent:\n{0}\n\nDoes this message give the agent a go-ahead, such as yes, confirm, proceed, go ahead, or please do it? Picking an option, naming a payment method, asking a question, or describing a request is not a go-ahead.', u.text)) < 0.05
+```
+
+**Classify with a decoy label.** When did the customer say the agent misunderstood them? About 7 of 16 hits are right, in 5 seconds. Without the "customer corrects self" label, customers fixing their own order ID fill the results.
+
+```sql
+SELECT u.message_id,
+       AI.CLASSIFY(PROMPT('A customer wrote this to a support agent:\n{0}\n\nWhat is going on in this message?', u.text),
+         ARRAY[('agent misunderstood', 'the customer says the agent got it wrong, has the wrong flight, order, or item, or repeats an ignored request'),
+               ('customer corrects self', 'the customer fixes their own wrong detail, such as an order ID, zip code, or email, or says they made a mistake'),
+               ('no mix-up', 'anything else: giving details, answering, confirming, asking, or requesting')]) AS mixup
+FROM messages u
+WHERE u.role = 'user'
+  AND u.prev_user_id IS NOT NULL
+  AND mixup = 'agent misunderstood'
+```
+
+**Classify, then exclude with keywords.** When was the customer frustrated with the agent? 65 messages in 51 conversations, in 5 seconds; most are real. Without the `LIKE` filters, complaints about flight delays fill the results. A second classify label for what the frustration was aimed at cut the list to 4, so use keywords instead.
+
+```sql
+SELECT u.message_id,
+       AI.CLASSIFY(PROMPT('A customer wrote this to a support agent:\n{0}\n\nHow does the customer feel about the agent?', u.text),
+         ARRAY[('frustrated', 'annoyed, impatient, or upset with the agent, e.g. complains, says this is ridiculous, or asks why the agent keeps doing something'),
+               ('neutral', 'calm: gives details, answers, asks, confirms, or requests'),
+               ('pleased', 'thanks or praises the agent')]) AS mood
+FROM messages u
+WHERE u.role = 'user'
+  AND u.text NOT LIKE '%###STOP###%'
+  AND u.text NOT LIKE '%delay%'
+  AND u.text NOT LIKE '%damaged%'
+  AND mood = 'frustrated'
+```
+
+**Classify and extract the quote for suggestions.** Find instances of a failure mode, with the exact sentence to highlight. The query below found 27 agent replies in 9 seconds. Most were good suggestions, after dropping plain closings like "Have a great day!" in code. Ask a narrow question: "Does the reply contain stilted filler?" matched 1,075 replies.
+
+```sql
+SELECT a.message_id,
+       AI.CLASSIFY(PROMPT('A customer support agent wrote this reply:\n{0}\n\nDoes the agent talk about itself, its day, or its feelings?', a.text),
+         ARRAY[('talks about itself', 'describes its own day, feelings, enjoyment, or purpose, like my day is always focused on helping you'),
+               ('task only', 'everything else, including polite closings and questions to the customer')]) AS self_talk,
+       AI.EXTRACT(a.text, {'line': 'Which sentence is the agent talking about itself, its day, or its feelings?'}) AS phrase
+FROM messages a
+WHERE a.role = 'assistant'
+  AND self_talk = 'talks about itself'
+```
+
+`phrase` comes back as `{"line": "..."}`. Push `phrase.line` as the suggestion's `quote`, and strip markdown such as `**` so the quote matches the rendered text.
+
+**No model needed.** Some questions are structural:
+- Which conversations took more than 5 turns to find the order? Find the first turn where the order lookup tool returned an order.
+- Did the agent hand off when the customer asked for a human? Check for "human", "manager", or "representative" in customer messages, then look for a transfer tool call in the same turn.
+- Did the agent write out an address the customer asked to keep private? Find "rather not share … address" in customer messages, then look for a street address in later agent replies.
+
+Compute these in Python over the records and post the rows with a note.
+
+## What did not work
+
+- `AI.CLASSIFY` with labels "asks for a human" and "no" matched 1,723 of about 4,000 customer messages. Use keywords for requests with obvious wording.
+- An `AI.SCORE` question with a long list of exclusions ranked confirmations like "Yes, please go ahead" highest. Ask the positive question and put a short list of what does not count after it, as in the first example.
+- Requiring a second classify label ("whose mistake is it?") together with the first left 1 row of 16.
+
 Small models (Qwen3 4B) have known limits:
 - Scores cluster near 0 and 1. A cutoff helps only when the question is worded precisely.
 - A broad label like "asks for a human" can match a third of all messages. Read 10 random rows before trusting any result.
