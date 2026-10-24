@@ -9,9 +9,10 @@ You are running an interactive error analysis session. The user has a dataset (J
 
 This skill is meant for interactive sessions only.
 
-This skill has two parts:
+This skill has three parts:
 - This file covers phases 1 through 4. You read the data, design the UI, build it, and select samples.
 - [review-loop.md](review-loop.md) covers phase 5. You run the interactive review session.
+- [query-tab.md](query-tab.md) covers the Ask tab and Quail on Modal. You answer the reviewer's questions over the whole dataset with AI SQL, and you search for failure mode instances.
 
 Read this file first to build everything. Once the app is running and the human starts reviewing, follow [review-loop.md](review-loop.md).
 
@@ -127,19 +128,21 @@ Structural outlier flags. Show in the header only, not inline.
   - `POST /api/patterns` lets the agent push the updated taxonomy
   - `GET /api/suggestions` returns agent-suggested annotations
   - `POST /api/suggestions` lets the agent push suggestions
+  - `POST /api/ask`, `POST /api/answer`, and `GET /api/questions` run the Ask tab. See [query-tab.md](query-tab.md).
 - On-disk files in an `error_discovery_data/` directory:
-  - `samples.json`, `annotations.json`, `graph.json`, `patterns.json`, `suggestions.json`
+  - `samples.json`, `annotations.json`, `graph.json`, `patterns.json`, `suggestions.json`, `questions.json`
 - The HTML app auto-saves to the server on every annotation. It polls for new samples and suggestions.
 
 ### HTML app structure
 
-Three views, toggled from the top bar:
+Four views, toggled from the top bar:
 
 1. Article/content view. The main review interface where the human reads and annotates.
 2. Map view. A 2D scatter plot (PCA or UMAP projection) of all records. It shows clusters, which items are in the sample, and which have been annotated. The reviewer can click a sample node to go to its content view.
 3. Progress view. Two sections:
    - Failure modes: a treemap of modes the agent has categorized so far. Each block is a failure mode, sized by annotation count. Inside each block, list the notes. The reviewer can click a note to go to that annotation in the content view.
    - Agent suggestions to review: a list of pending suggestions with checkboxes. Each row shows the failure mode, quoted text, and source record. The reviewer can click the text to go to that spot in the article. At the top, a "Select all" checkbox and "Accept selected" / "Dismiss selected" buttons. This lets the reviewer select all, uncheck the few they disagree with, and accept the rest in one click.
+4. Ask view. The reviewer types a question about the whole dataset. You answer it with a Quail query on Modal, and the rows link back to records. See [query-tab.md](query-tab.md).
 
 Content view design. Apply the visual encoding from Phase 2:
 

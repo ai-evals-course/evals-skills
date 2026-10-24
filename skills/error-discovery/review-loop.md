@@ -40,7 +40,9 @@ When new annotations appear:
 
 Wait until the human has annotated about 5 distinct records before the first corpus-wide scan; early annotations are too weak a signal of what the human considers a failure. Never scan before the human has reviewed anything. After that, when you discover a new failure mode (or an existing one becomes clearer), scan **all** records for instances. Include both reviewed and unreviewed records.
 
-**Spawn one background subagent per failure mode.** Give the subagent the mode name, description, and example quotes. It reads through all records and returns a list of suggested annotations: `{record_id, text, start, end}`. One mode = one subagent, not one per record. Multiple modes can run in parallel. This happens in the background while the human keeps reviewing.
+**Search with Quail first.** When a model can recognize the mode from one message or segment, write one Quail query over all records and use `AI.EXTRACT` for the quote. See [query-tab.md](query-tab.md). If a keyword or a structural check finds the mode, use code instead. Read 10 random hits before you push suggestions, and cap each mode at about 6 to 8 suggestions per batch.
+
+**Otherwise, spawn one background subagent per failure mode.** Use a subagent when the mode needs context from the whole record. Give the subagent the mode name, description, and example quotes. It reads through all records and returns a list of suggested annotations: `{record_id, text, start, end}`. One mode = one subagent, not one per record. Multiple modes can run in parallel. This happens in the background while the human keeps reviewing.
 
 When subagents return, merge their suggestions and push to `POST /api/suggestions`. The UI polls for new suggestions automatically and shows them in the Progress view queue and as purple highlights in the article view.
 

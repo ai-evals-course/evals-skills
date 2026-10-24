@@ -66,6 +66,9 @@ JSONL/CSV/JSON file of LLM outputs or traces, and it:
    picks).
 5. Runs an interactive loop: monitors annotations, categorizes failure modes,
    proposes new samples to increase coverage.
+6. Answers questions over the whole dataset from an Ask tab. The agent writes
+   SQL with AI functions and runs it with [Quail](https://github.com/fsdatalab/quail)
+   on a Modal GPU. The same queries find more instances of each failure mode.
 
 ![Error Discovery Skill Workflow](workflow.png)
 
