@@ -1,0 +1,7 @@
+interface:
+  display_name: "Evals Start"
+  short_description: "Route an eval request to the right workflow."
+  default_prompt: "Use $evals-start to help me choose the right eval workflow."
+
+policy:
+  allow_implicit_invocation: true

@@ -7,6 +7,8 @@ description: Run error analysis on a dataset. Build a review UI, select diverse 
 
 You are running an interactive error analysis session. The user has a dataset (JSONL, CSV, JSON, etc.) of LLM outputs or traces and wants to discover failure modes by reviewing samples.
 
+This skill is meant for interactive sessions only.
+
 This skill has three parts:
 - This file covers phases 1 through 4. You read the data, design the UI, build it, and select samples.
 - [review-loop.md](review-loop.md) covers phase 5. You run the interactive review session.
@@ -144,7 +146,7 @@ Four views, toggled from the top bar:
 
 Content view design. Apply the visual encoding from Phase 2:
 
-- Header: title + label + topic. Keep it minimal. Add structural outlier flags (from Phase 2) only when the record is a genuine outlier. Do not add cluster IDs, sampling method, percentile bars, or other pipeline metadata.
+- Header: title + label + topic. Keep it minimal. Add structural outlier flags (from Phase 2) only when the record is a genuine outlier.
 - Body: render the primary content using the appropriate treatment per content type.
 
   For multi-turn traces (agent logs, conversations, chat):
@@ -199,4 +201,6 @@ Map view:
 
 ## Phase 5: Run the interactive review loop
 
-Once the app is running and the human starts reviewing, follow [review-loop.md](review-loop.md) for the ongoing interactive session. Note that it's important to use the Monitor Tool during the interactive review process.
+Once the app is running and the human starts reviewing, follow [review-loop.md](review-loop.md) for the ongoing interactive session, including how to monitor annotations as they arrive.
+
+If the session ends before a human can review (a non-interactive run, for example `codex exec` or `claude -p`), build and smoke-test the app, then stop the server and give the command to launch it later; never claim the review loop ran or that anything is still running.

@@ -8,7 +8,7 @@ Error discovery alternates between two modes.
 
 **Breadth**: cover as much of the dataset as possible. Pick diverse samples, fill cluster gaps, add random records. The goal is to find different failure modes.
 
-**Depth**: once a mode is found, examine it thoroughly. Scan all records for instances, re-review earlier items, refine the definition. The goal is to understand one failure mode well.
+**Depth**: once a mode is found, examine it thoroughly. Re-review earlier items and refine the definition. After the human has annotated about 5 distinct records, scan all records for instances.
 
 Alternate between these. Review broadly until you find something, then examine that mode in depth, then go broad again.
 
@@ -21,7 +21,11 @@ Tell the user what you are doing at each step during the review loop. When you c
 1. Start the Python server in the background.
 2. Open the app in the browser.
 3. Tell the user the app is ready. Explain the interaction briefly.
-4. **Monitor the annotations file** using the Monitor tool with `persistent: true`. Write a Python polling script that watches `error_discovery_data/annotations.json` for changes every 2 seconds, comparing content to detect new or deleted annotations. Each change emits a line to stdout with the total count, number of records, and the latest note text. The Monitor tool turns each stdout line into a notification, so you react in real time as annotations arrive. Do not use `inotifywait` or filesystem events — poll with a simple read-compare loop for cross-platform reliability.
+4. **Monitor the annotations file.** Watch `error_discovery_data/annotations.json` for new or deleted annotations by comparing content every 2 seconds.
+   - Claude Code: use the Monitor tool with `persistent: true`. Each detected change becomes a notification, so you react in real time.
+   - Everything else: write a polling script, run it in the background with output appended to a log file, and read the new lines whenever you take a turn.
+
+   Tell the user how you are watching for annotations. Do not use `inotifywait` or filesystem events — poll with a simple read-compare loop for cross-platform reliability.
 
 ## Process annotations as they arrive
 
@@ -34,7 +38,7 @@ When new annotations appear:
 
 ## Depth mode: scan for failure mode instances
 
-When you discover a new failure mode (or an existing one becomes clearer), scan **all** records for instances. Include both reviewed and unreviewed records.
+Wait until the human has annotated about 5 distinct records before the first corpus-wide scan; early annotations are too weak a signal of what the human considers a failure. Never scan before the human has reviewed anything. After that, when you discover a new failure mode (or an existing one becomes clearer), scan **all** records for instances. Include both reviewed and unreviewed records.
 
 **Search with Quail first.** When a model can recognize the mode from one message or segment, write one Quail query over all records and use `AI.EXTRACT` for the quote. See [query-tab.md](query-tab.md). If a keyword or a structural check finds the mode, use code instead. Read 10 random hits before you push suggestions, and cap each mode at about 6 to 8 suggestions per batch.
 

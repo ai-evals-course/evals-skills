@@ -1,0 +1,7 @@
+interface:
+  display_name: "Validate Evaluator"
+  short_description: "Calibrate LLM judges against human labels."
+  default_prompt: "Use $validate-evaluator to calibrate my LLM judge against human labels."
+
+policy:
+  allow_implicit_invocation: true

@@ -1,0 +1,20 @@
+{
+  "name": "ai-evals-course",
+  "interface": {
+    "displayName": "AI Evals Course"
+  },
+  "plugins": [
+    {
+      "name": "evals",
+      "source": {
+        "source": "local",
+        "path": "./"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

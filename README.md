@@ -1,4 +1,56 @@
-# Error discovery skill
+# Eval Skills
+
+Skills that guide AI coding agents to help you build [product-specific](https://hamel.dev/notes/llm/evals/) AI evals (not foundation model benchmarks).
+
+These skills guard against common mistakes we've seen helping 50+ companies and teaching thousands of students in our [AI Evals course](https://maven.com/parlance-labs/evals?promoCode=evals-info-url).
+
+## Why skills for evals
+
+There are many [easily avoidable footguns](https://hamel.dev/blog/posts/revenge/) in evals. These skills help you avoid them.
+
+**evals-start** is the entry point. It looks at your situation and routes you to the right skill. Most of the time it will send you to one of these two:
+
+- **[eval-audit](skills/eval-audit/SKILL.md)**, if you already have an eval pipeline. It inspects your setup and recommends next steps.
+- **[error-discovery](skills/error-discovery/SKILL.md)**, if you have traces but haven't analyzed them yet. It builds an annotation interface and helps you sample traces. Watch [Shreya's walkthrough](https://youtu.be/tqUDjc1HzO4).
+
+## Installation
+
+Install with [npx skills](https://github.com/vercel-labs/skills):
+
+```bash
+npx skills add https://github.com/ai-evals-course/evals-skills
+```
+
+Install one skill only:
+
+```bash
+npx skills add https://github.com/ai-evals-course/evals-skills --skill error-discovery
+```
+
+Check for updates:
+
+```bash
+npx skills check
+npx skills update
+```
+
+## Available skills
+
+| Skill | What it does |
+|-------|-------------|
+| [evals-start](skills/evals-start/SKILL.md) | Entry point. Routes to the skill that matches your situation |
+| [eval-audit](skills/eval-audit/SKILL.md) | Audit an eval pipeline and surface problems with prioritized severity |
+| [error-discovery](skills/error-discovery/SKILL.md) | Build a review app, select diverse samples, and organize your notes into failure modes |
+| [generate-synthetic-data](skills/generate-synthetic-data/SKILL.md) | Create diverse synthetic test inputs using dimension-based tuple generation |
+| [write-code-eval](skills/write-code-eval/SKILL.md) | Write code checks for objective failure modes |
+| [write-judge-prompt](skills/write-judge-prompt/SKILL.md) | Design LLM-as-Judge evaluators for subjective quality criteria |
+| [validate-evaluator](skills/validate-evaluator/SKILL.md) | Calibrate LLM judges against human labels using data splits, TPR/TNR, and bias correction |
+| [evaluate-rag](skills/evaluate-rag/SKILL.md) | Evaluate retrieval and generation quality in RAG pipelines |
+| [build-review-interface](skills/build-review-interface/SKILL.md) | Build custom annotation interfaces for human trace review |
+
+## The error-discovery skill
+
+The `error-discovery` skill in the plugin is the most important. Error discovery involves qualitative and quantitative analysis of your traces to find failure modes. You should only write evals after doing this step.
 
 This skill makes an AI agent run error analysis on a dataset. Point it at a
 JSONL/CSV/JSON file of LLM outputs or traces, and it:
@@ -23,25 +75,16 @@ JSONL/CSV/JSON file of LLM outputs or traces, and it:
 You read and leave free-text notes. The agent sorts them into failure modes,
 tracks coverage, and picks new samples to fill gaps.
 
-The full instructions are in `SKILL.md`.
-
-## How to use it
-
-`SKILL.md` is a plain markdown file. Any agent that can read a file can follow
-it.
-
-- Claude Code reads skills from `~/.claude/skills`. Clone the repo into a folder
-  named `error-discovery`:
-
-```
-git clone https://github.com/shreyashankar/error-discovery-skill ~/.claude/skills/error-discovery
-```
-
-- Other agents can use the rules too. Paste the contents of `SKILL.md` into
-  whatever instructions that agent reads.
-
-Then point the agent at a dataset:
+Once installed, point the agent at a dataset:
 
 ```
 Can you help me do error analysis on traces.jsonl?
 ```
+
+## Write your own skills
+
+These skills address common eval mistakes. Start here, then write skills for your own data and domain. Matt Pocock's [writing-for-agents skill](https://github.com/mattpocock/skills/tree/main/skills/productivity/writing-for-agents) explains how to write instructions for agents.
+
+## Beyond these skills
+
+These skills cover eval work that applies across projects. The [AI Evals course](https://maven.com/parlance-labs/evals?promoCode=evals-info-url) also covers production monitoring, regression suites, and cost.
