@@ -73,6 +73,12 @@ Flag LLM judges used for objectively checkable criteria: format validation, cons
 
 **Finding if over-relying on judges:** Replace objective checks with code (regex, parsing, schema validation, execution tests). Reserve LLM judges for criteria requiring interpretation. Use `write-code-eval`.
 
+**Check:** For offline evals with golden references, is the judge a matcher (compares generated to golden) rather than an estimator (rates the output alone)?
+
+Flag judges that rate output quality on their own when a golden item exists for each case.
+
+**Finding if estimator:** Estimators are harder to validate, and the judge's taste defines correctness instead of the golden set. Give the judge one generated item and one golden item, ask whether they match, and compute scores from the matches in code. Use `write-judge-prompt`.
+
 **Check:** Are similarity metrics used as primary evaluation?
 
 Flag ROUGE, BERTScore, cosine similarity, or embedding distance used as the main evaluator for generation quality.
