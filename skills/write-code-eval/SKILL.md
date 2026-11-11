@@ -24,4 +24,6 @@ Start with a failure mode found through error analysis. Write one check for that
 | Bad tool call | Check arguments against the tool schema or run the call in a safe test environment |
 | Wrong value | Compare the output with a reference value |
 
+When code cannot compare the output with the reference but an LLM can, see "Reference-Based Before Reference-Free" in `write-judge-prompt`.
+
 Choose the check from the failure rule. For a failure with both objective and interpretive parts, check the objective part with code and use a judge for the rest.

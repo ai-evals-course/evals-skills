@@ -18,6 +18,22 @@ Design a binary Pass/Fail LLM-as-Judge evaluator for one specific failure mode. 
 - You have human-labeled traces for this failure mode (at least 20 Pass and 20 Fail examples).
 - A code-based evaluator cannot check this failure mode. Exhaust code-based options before reaching for a judge — many failure modes that seem subjective reduce to keyword checks, regex, or API calls when you understand the domain. Example: detecting whether an AI interviewing coach suggests "general" questions (asking about typical behavior instead of a specific past event) seems to require semantic understanding, but in practice a keyword check for words like "usually," "typical," and "normally" could work quite well.
 
+## Reference-Based Before Reference-Free
+
+For offline evals, where the dataset has golden (reference) answers, prefer judges in this order:
+
+1. **Deterministic comparison.** Code compares the output with the golden item (exact match, set overlap, execution against the reference). Use `write-code-eval`.
+2. **Matcher (reference-based judge).** An LLM sees one generated item and one golden item and answers only whether they match, with a critique first. Code then computes the score (precision, recall, accuracy) from the matches. The judge never rates quality; it only compares.
+3. **Estimator (reference-free judge).** An LLM rates the output on its own against written criteria. Use it only when no golden item exists to compare against, and state why.
+
+A matcher's task is narrower than an estimator's, so it is easier to validate with TPR/TNR against human match labels. Its errors are per pair and therefore actionable, and the golden set, not the judge's taste, defines correctness. Production monitoring has no reference, so this ordering does not apply there.
+
+| Failure Mode | Golden Item | Matcher Question |
+|-------------|-------------|------------------|
+| Missed findings in a code review | Known issues for the diff | Does this generated finding describe the same issue as this golden issue? |
+| Wrong extracted fact | Reference value for the field | Does the generated value express the same fact as the reference value? |
+| Incomplete summary | Required key points | Does the summary state this key point? |
+
 ## The Four Components
 
 Every judge prompt requires exactly four components:
@@ -140,5 +156,6 @@ Start with the most capable model available. The same model used for the main ta
 - **No few-shot examples.** Without examples, the model won't know what counts as a failure in your application.
 - **Dev/test examples used as few-shot.** This is data leakage. Use only the training split.
 - **Likert scales (1-5, letter grades, etc.).** Binary pass/fail only. Likert scales produce scores that sound precise but can't be calibrated: annotators disagree on the difference between a 3 and a 4, and the judge inherits that noise. Binary forces you to define a clear decision boundary upfront, which makes inter-annotator agreement measurable and the judge's errors actionable. If you need to capture severity, use multiple binary judges (e.g., "factually wrong" and "dangerously wrong") rather than one ordinal scale.
+- **An estimator where a matcher was possible.** A golden item exists, but the judge rates the output alone. Give the judge the golden item and ask whether the two match.
 - **Skipping validation.** Measure alignment with human labels using validate-evaluator before trusting the judge.
 - **Judges for specification failures without fixing the prompt first.** If the prompt never asked for the behavior, add the instruction before building an evaluator. For critical requirements, a judge can still serve as a regression guard.
